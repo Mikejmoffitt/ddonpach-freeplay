@@ -49,6 +49,10 @@ cave_logo_vram_fix:
 hiscore_vram_fix:
 	ORG	$057C24
 	andi.w	#$7F00, d4
+	ORG	$057C06
+	jmp	hiscore_vram_fix_a0_patch
+	ORG	$058686
+	andi.w	#$7F00, d4
 
 title_vram_fix:
 	ORG	$0578B8
@@ -356,3 +360,11 @@ credit_hide_demo:
 	
 .freeplay_en:
 	rts
+
+hiscore_vram_fix_a0_patch:
+	move.w	d2, d0
+	andi.w	#$F, d0
+	move.l	a0, d4
+	ori.w	#$4000, d4
+	move.l	d4, a0
+	jmp	($057C0C).l
