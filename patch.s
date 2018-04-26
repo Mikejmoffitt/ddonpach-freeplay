@@ -45,6 +45,8 @@ S_ATLUSSC     = $D
 cave_logo_vram_fix:
 	ORG	$04C088
 	lea	($704000).l, a0
+	ORG	$0051B6
+	jmp	cave_logo_vram_fix_clear_screen
 
 hiscore_vram_fix:
 	ORG	$057C24
@@ -368,3 +370,15 @@ hiscore_vram_fix_a0_patch:
 	ori.w	#$4000, d4
 	move.l	d4, a0
 	jmp	($057C0C).l
+
+cave_logo_vram_fix_clear_screen:
+	movem.l	d0-d1/a0, -(sp)
+	lea	($704000).l, a0
+	move.w	#$0FFF, d0
+	clr.l	d1
+.clr_loop:
+	move.l	d1, (a0)+
+	dbf	d0, .clr_loop
+	movem.l	(sp)+, d0-d1/a0
+	move.w	#$C, ($1017A6).l
+	jmp	$005178
